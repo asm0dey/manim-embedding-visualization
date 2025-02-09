@@ -33,7 +33,7 @@ class CosineDistanceVisualization(Scene):
         # Using more varied 2D vectors for better visualization
         vectors = {
             "rose": np.array([2.0, 0.6]),  # flower characteristics
-            "sunflower": np.array([1.8, 1.8]),  # flower + sun association
+            "sunflower": np.array([1.8, 1.3]),  # flower + sun association
             "sun": np.array([0.5, 2.1]),  # celestial object
         }
 
@@ -95,7 +95,7 @@ class CosineDistanceVisualization(Scene):
             angle_texts.append(angle_text)
 
             annotation_arrow = DashedLine(
-                start=angle_text.get_right(), end=angle.get_center(), color=LIGHT_GREY
+                start=angle_text.get_right(), end=angle.get_start(), color=LIGHT_GREY
             )
             angle_arrows.append(annotation_arrow)
             self.play(Write(angle_text), Create(annotation_arrow))
