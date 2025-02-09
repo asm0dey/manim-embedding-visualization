@@ -1,0 +1,27 @@
+name: Render Manim videos
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  build:
+    concurrency:
+      cancel-in-progress: false
+      group: render
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Rendering Scenes
+        uses: manim-kindergarten/manim_action_renderer@master
+        id: renderer
+        with:
+          source_file: vis.py
+          scene_names: |
+            WordEmbeddingAnalogy
+            CosineDistanceVisualization
+          args: "-qk"
+      - name: Save output as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Videos
+          path: ${{ steps.renderer.outputs.video_path }}
