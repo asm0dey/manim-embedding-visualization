@@ -37,8 +37,8 @@ class WordEmbeddingAnalogy(Scene):
         woman_label = Text("woman", color=RED).next_to(
             woman_vec.get_end(), UP + LEFT, buff=0.1
         )
-        queen_label = Text("queen", color=PURPLE).next_to(
-            queen_vec.get_end(), UP + RIGHT, buff=0.1
+        queen_label = Text("queen = ", color=PURPLE).next_to(
+            queen_vec.get_end(), UP + LEFT, buff=0.1
         )
 
         # Show initial vectors
@@ -46,15 +46,34 @@ class WordEmbeddingAnalogy(Scene):
         self.play(Create(man_vec), Write(man_label))
         self.wait(2)
 
+        king_plus_man_vector = Arrow(
+            king_end, king_end + man_end - origin, color=YELLOW, buff=0
+        )
+        king_plus_man_vector_label = Text("king + man", color=YELLOW).next_to(
+            king_plus_man_vector.get_end(), UP, buff=0.1
+        )
+        self.play(
+            TransformFromCopy(man_vec, king_plus_man_vector),
+            FadeOut(man_vec, man_label),
+            TransformFromCopy(man_label, king_plus_man_vector_label),
+        )
+        self.wait(3)
         # Demonstrate vector subtraction (king - man)
         # Create a copy of negative man vector (-man) that starts at king's end
-        man_negative = Arrow(
-            king_end, king_end - (man_end - origin), color=GREEN, buff=0
+        king_minus_man = Arrow(
+            king_end, king_end - man_end + origin, color=GREEN, buff=0
         )
-        man_negative.set_opacity(0.5)
+        king_minus_man.set_opacity(0.5)
+        king_minus_man_label = Text("king - man", color=GREEN).next_to(
+            king_minus_man.get_end(), UP, buff=0.1
+        )
 
         # Show the movement of negative man vector
-        self.play(TransformFromCopy(man_vec, man_negative), FadeOut(man_vec, man_label))
+        self.play(
+            TransformFromCopy(king_plus_man_vector, king_minus_man),
+            TransformFromCopy(king_plus_man_vector_label, king_minus_man_label),
+            FadeOut(king_plus_man_vector, king_plus_man_vector_label),
+        )
 
         # Create the difference vector
         king_minus_man_vector = Arrow(
@@ -74,7 +93,7 @@ class WordEmbeddingAnalogy(Scene):
         self.play(
             Create(woman_vec),
             Write(woman_label),
-            # FadeOut(man_negative)
+            # FadeOut(king_minus_man)
         )
 
         # Demonstrate vector addition (king-man) + woman
@@ -100,12 +119,14 @@ class WordEmbeddingAnalogy(Scene):
             origin, king_minus_man_plus_woman.get_end(), color=ORANGE, buff=0
         )
         result_label = Text("king - man + woman", color=ORANGE).next_to(
-            result_vec.get_end(), RIGHT, buff=0.1
+            result_vec.get_end(), UP + RIGHT, buff=0.1
         )
 
         self.play(
             Create(result_vec),
             Write(result_label),
+            FadeOut(woman_vec),
+            FadeOut(woman_label),
             # FadeOut(king_minus_man_vector),
             # FadeOut(king_minus_man_plus_woman)
         )
@@ -120,14 +141,20 @@ class WordEmbeddingAnalogy(Scene):
         ).to_edge(UP)
 
         self.play(Write(final_equation))
-        self.wait(2)
-
-        # Optional: fade out the helper vectors
-        # self.play(
-        #     FadeOut(man_negative),
-        #     FadeOut(king_minus_man_plus_woman)
-        # )
-        self.wait(2)
+        self.wait(4)
+        tmp = self.mobjects
+        tmp.remove(final_equation)
+        self.play(FadeOut(*tmp))
+        self.play(
+            Transform(
+                final_equation,
+                MathTex(
+                    "\\text{king} - \\text{man} + \\text{woman} = \\text{queen}",
+                    font_size=80,
+                ),
+            ),
+        )
+        self.wait(3)
 
 
 if __name__ == "__main__":
