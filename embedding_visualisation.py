@@ -141,10 +141,8 @@ class WordEmbeddingAnalogy(Scene):
         ).to_edge(UP)
 
         self.play(Write(final_equation))
-        self.wait(4)
-        tmp = self.mobjects
-        tmp.remove(final_equation)
-        self.play(FadeOut(*tmp))
+        self.wait(2)
+        self.play(FadeOut(*[mobj for mobj in self.mobjects if mobj != final_equation]))
         self.play(
             Transform(
                 final_equation,

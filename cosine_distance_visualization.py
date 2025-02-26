@@ -16,7 +16,7 @@ class CosineDistanceVisualization(Scene):
             font_size=50,
         )
         self.play(Write(formula))
-        self.wait(5)
+        self.wait(7)
         self.play(formula.animate.set(font_size=30))
         self.play(formula.animate.to_edge(DOWN))
 
@@ -63,6 +63,7 @@ class CosineDistanceVisualization(Scene):
 
             self.play(Create(arrows[word]), Write(labels[word]))
 
+        self.wait(7)
         # Show angles and distances between pairs
         pairs = [("rose", "sunflower"), ("sunflower", "sun"), ("rose", "sun")]
         angles = {}
@@ -95,12 +96,13 @@ class CosineDistanceVisualization(Scene):
             angle_texts.append(angle_text)
 
             annotation_arrow = DashedLine(
-                start=angle_text.get_right(), end=angle.get_start(), color=LIGHT_GREY
+                start=angle_text.get_right(), end=angle.get_end(), color=LIGHT_GREY
             )
             angle_arrows.append(annotation_arrow)
             self.play(Write(angle_text), Create(annotation_arrow))
             angles[(word1, word2)] = angle
 
+        self.wait(7)
         # Arrange distance texts
         distance_group = VGroup(*distances.values()).arrange(DOWN, aligned_edge=LEFT)
         distance_group.to_edge(RIGHT)
